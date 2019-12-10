@@ -28,23 +28,31 @@ public class Tree {
     }
 
     public void add_node(Node parent, Node temp_node) {
+
         if (nodes.size() == 0) {
             root = temp_node;
             nodes.add(temp_node);
         } else {
             temp_node.setParent(parent);
-            parent.setLeft_child(temp_node);
+            if (parent.getLeft_child() == null)
+                parent.setLeft_child(temp_node);
+            else {
+                Node node = parent.getLeft_child();
+                while (node.getRight_brother() != null)
+                    node = node.getRight_brother();
+                node.setRight_brother(temp_node);
+
+            }
             nodes.add(temp_node);
-        }
 
-    }
-
-    @Override
-    public String toString() {
-        String str = "" ;
-        for(int i = 0 ; i < nodes.size(); i++ ){
-            str += nodes.get(i).getInfo() + "  ";
         }
-        return str;
     }
-}
+        @Override
+        public String toString () {
+            String str = "";
+            for (int i = 0; i < nodes.size(); i++) {
+                str += nodes.get(i).getInfo() + "  ";
+            }
+            return str;
+        }
+    }

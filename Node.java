@@ -38,7 +38,7 @@ public class Node {
     }
 
     public Node(){
-        this.info = "a";
+        this.info = "";
         this.status = "";
         this.parent = null;
         this.Left_child = null;
@@ -63,5 +63,12 @@ public class Node {
 
     public void setRight_brother(Node right_brother) {
         Right_brother = right_brother;
+    }
+
+    @Override
+    public String toString() {
+        return "Node{" +
+                "info='" + info + '\'' +
+                '}';
     }
 }
