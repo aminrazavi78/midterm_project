@@ -5,6 +5,9 @@ import java.util.ArrayList;
 public class Tree {
     private Node root;
     private ArrayList<Node> nodes = new ArrayList<>();
+    private  ArrayList<Node> mandatory_nodes = new ArrayList<>();
+
+
 
     public Tree(Node root) {
         this.root = root;
@@ -27,7 +30,13 @@ public class Tree {
         return nodes;
     }
 
+    public ArrayList<Node> getMandatory_nodes() {
+        return mandatory_nodes;
+    }
+
     public void add_node(Node parent, Node temp_node) {
+        if(temp_node.getStatus().equals("Mandatory"))
+            mandatory_nodes.add(temp_node);
 
         if (nodes.size() == 0) {
             root = temp_node;
@@ -47,12 +56,20 @@ public class Tree {
 
         }
     }
-        @Override
-        public String toString () {
-            String str = "";
-            for (int i = 0; i < nodes.size(); i++) {
-                str += nodes.get(i).getInfo() + "  ";
-            }
-            return str;
-        }
+
+    public boolean search(Node node) {
+        if (nodes.contains(node))
+            return true;
+        else return false;
     }
+
+    @Override
+    public String toString() {
+        String str = "";
+        for (int i = 0; i < nodes.size(); i++) {
+            str += nodes.get(i).getInfo() + "  ";
+        }
+        return str;
+    }
+
+}

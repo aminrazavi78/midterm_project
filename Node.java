@@ -1,6 +1,8 @@
 package com.company;
 
 
+import java.util.Objects;
+
 public class Node {
     private String info ;
     private String status;
@@ -63,6 +65,19 @@ public class Node {
 
     public void setRight_brother(Node right_brother) {
         Right_brother = right_brother;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Node node = (Node) o;
+        return info.equals(node.info);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(info);
     }
 
     @Override
