@@ -1,5 +1,8 @@
 package com.company;
 
+import com.sun.xml.internal.ws.addressing.WsaActionUtil;
+import com.sun.xml.internal.ws.api.model.wsdl.WSDLOutput;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Objects;
@@ -8,94 +11,95 @@ import java.util.Scanner;
 /**
  * @author Amin Razavi
  */
- class Main {
+class Main {
 
-///////////////////////////node////////////////////////////
-public static class Node {
-    private String info;
-    private String status;
-    private Node parent;
-    private Node Left_child;
-    private Node Right_brother;
+    ///////////////////////////node////////////////////////////
+    public static class Node {
+        private String info;
+        private String status;
+        private Node parent;
+        private Node Left_child;
+        private Node Right_brother;
 
-    String getInfo() {
-        return info;
+        String getInfo() {
+            return info;
+        }
+
+        String getStatus() {
+            return status;
+        }
+
+        Node getParent() {
+            return parent;
+        }
+
+        Node getLeft_child() {
+            return Left_child;
+        }
+
+        Node getRight_brother() {
+            return Right_brother;
+        }
+
+        //new
+        Node(String info, String status, Node parent, Node left_child, Node right_brother) {
+            this.info = info;
+            this.status = status;
+            this.parent = parent;
+            Left_child = left_child;
+            Right_brother = right_brother;
+        }
+
+        Node() {
+            this.info = "";
+            this.status = "";
+            this.parent = null;
+            this.Left_child = null;
+            this.Right_brother = null;
+        }
+
+        void setInfo(String info) {
+            this.info = info;
+        }
+
+        void setStatus(String status) {
+            this.status = status;
+        }
+
+        void setParent(Node parent) {
+            this.parent = parent;
+        }
+
+        void setLeft_child(Node left_child) {
+            Left_child = left_child;
+        }
+
+        void setRight_brother(Node right_brother) {
+            Right_brother = right_brother;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Node node = (Node) o;
+            return info.equals(node.info);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(info);
+        }
+
+        @Override
+        public String toString() {
+            return "Node{" +
+                    "info='" + info + '\'' +
+                    '}';
+        }
     }
 
-    String getStatus() {
-        return status;
-    }
-
-    Node getParent() {
-        return parent;
-    }
-
-    Node getLeft_child() {
-        return Left_child;
-    }
-
-    Node getRight_brother() {
-        return Right_brother;
-    }
-
-    //new
-    Node(String info, String status, Node parent, Node left_child, Node right_brother) {
-        this.info = info;
-        this.status = status;
-        this.parent = parent;
-        Left_child = left_child;
-        Right_brother = right_brother;
-    }
-
-    Node() {
-        this.info = "";
-        this.status = "";
-        this.parent = null;
-        this.Left_child = null;
-        this.Right_brother = null;
-    }
-
-    void setInfo(String info) {
-        this.info = info;
-    }
-
-    void setStatus(String status) {
-        this.status = status;
-    }
-
-    void setParent(Node parent) {
-        this.parent = parent;
-    }
-
-    void setLeft_child(Node left_child) {
-        Left_child = left_child;
-    }
-
-    void setRight_brother(Node right_brother) {
-        Right_brother = right_brother;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Node node = (Node) o;
-        return info.equals(node.info);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(info);
-    }
-
-    @Override
-    public String toString() {
-        return "Node{" +
-                "info='" + info + '\'' +
-                '}';
-    }
-    }
-//////////////////////node//////////////////////////////
+    //////////////////////node//////////////////////////////
 //////////////////////tree///////////////////////////////////
     static class Tree {
         private Node root;
@@ -129,16 +133,19 @@ public static class Node {
         }
 
         void add_node(Node parent, Node temp_node) {
+//            System.out.println("status " + temp_node.getStatus());
             if (temp_node.getStatus().equals("Mandatory"))
                 mandatory_nodes.add(temp_node);
 
-            if (nodes.size() == 0) {
-                root = temp_node;
-                nodes.add(temp_node);
-            } else {
+//            if (nodes.size() == 0) {
+//                root = temp_node;
+//                nodes.add(temp_node);
+//            }
+
                 temp_node.setParent(parent);
-                if (parent.getLeft_child() == null)
+                if (parent.getLeft_child() == null){
                     parent.setLeft_child(temp_node);
+                System.out.println("left       "+parent.getLeft_child());}
                 else {
                     Node node = parent.getLeft_child();
                     while (node.getRight_brother() != null)
@@ -146,9 +153,10 @@ public static class Node {
                     node.setRight_brother(temp_node);
 
                 }
+            System.out.println(temp_node.getLeft_child() + " " + temp_node + " " + temp_node.getParent());
                 nodes.add(temp_node);
 
-            }
+
         }
 
         boolean search(Node node) {
@@ -166,21 +174,34 @@ public static class Node {
             return str;
         }
 
+        public void print() {
+            for (Node node : mandatory_nodes) {
+                System.out.print(node + " ");
+
+            }
+        }
     }
 ///////////////////////tree////////////////////////////////
 
     private static boolean check(Tree tree, HashSet<Node> set) {
+//        System.out.println(tree);
+//        System.out.println("mandatory");
+//        tree.print();
         for (Node node : set) {
-            if (!tree.search(node))
+            if (!tree.search(node)) {
+                System.out.println("exist problem");
                 return false;
+            }
         }
         for (Node node : tree.getMandatory_nodes()) {
-            if (!set.contains(node))
+            if (!set.contains(node)) {
+                System.out.println("mandatory problem");
                 return false;
-
-
+            }
         }
         for (Node node : tree.getNodes()) {
+            // System.out.println(node.getLeft_child().getStatus().equals("Alternative") || node.getLeft_child().getStatus().equals("Or"));
+
             if (node.getLeft_child() != null && (node.getLeft_child().getStatus().equals("Alternative") || node.getLeft_child().getStatus().equals("Or"))) {
                 int counter = 0;
                 Node child = node.getLeft_child();
@@ -189,13 +210,16 @@ public static class Node {
                         counter++;
                     child = child.getRight_brother();
                 }
-                if (child.getStatus().equals("Alternative") && counter != 1)
+                System.out.println("counter is : " + counter);
+                if (child.getStatus().equals("Alternative") && counter != 1) {
+                    System.out.println("alternative problem");
                     return false;
-                else if  (child.getStatus().equals("Or") && (counter == 0 || counter < 0))
+                } else if (child.getStatus().equals("Or") && counter == 0) {
+                    System.out.println("or problem");
+                    ;
                     return false;
+                }
             }
-
-
         }
         return true;
     }
@@ -217,51 +241,49 @@ public static class Node {
         Tree tree = new Tree(fake_father);
         while (true) {
             String str = scan.nextLine();
+            if (!str.contains("+")) {
+                Node node = new Node();
+                node.setInfo(str);
+                tree.add_node(tree.getRoot(), node);
+            }
 
             if (str.contains("+")) {
                 String[] temp_line = str.split("[=,+]");
 
                 Node parent = new Node();
-
-
                 parent.setInfo(temp_line[0]);
 
                 for (int i = 0; i < temp_line.length; i++) {
                     Node node = new Node();
                     node.setInfo(temp_line[i].trim());
-
-                    // System.out.println(node);
-
+//                    System.out.println(node);
 //                    node.setParent(parent);
-                    tree.add_node(parent, node);
 
                     if (!temp_line[i].contains("?"))
                         node.setStatus("Mandatory");
-
-                    else
+                    else {
                         node.setStatus("Optional");
+                        node.setInfo(node.getInfo().replace("?", ""));
+                    }
 
+
+                    if (!tree.nodes.contains(node))
+                        tree.add_node(parent, node);
                 }
             }
             if (str.contains("|")) {
                 String[] temp_line = str.split("[=,|]");
-
                 Node parent = new Node();
-
-
                 parent.setInfo(temp_line[0]);
 
                 for (int i = 0; i < temp_line.length; i++) {
                     Node node = new Node();
                     node.setInfo(temp_line[i].trim());
-
-                    // System.out.println(node);
-
+//                    System.out.println(node);
 //                    node.setParent(parent);
-                    tree.add_node(parent, node);
-
-
                     node.setStatus("Or");
+                    if (!tree.nodes.contains(node))
+                        tree.add_node(parent, node);
 
                 }
             }
@@ -269,21 +291,16 @@ public static class Node {
                 String[] temp_line = str.split("[=,^]");
 
                 Node parent = new Node();
-
-
                 parent.setInfo(temp_line[0]);
 
                 for (int i = 0; i < temp_line.length; i++) {
                     Node node = new Node();
                     node.setInfo(temp_line[i].trim());
-
-                    // System.out.println(node);
-
+//                    System.out.println(node);
 //                    node.setParent(parent);
-                    tree.add_node(parent, node);
-
-
                     node.setStatus("Alternative");
+                    if (!tree.nodes.contains(node))
+                        tree.add_node(parent, node);
 
                 }
             }
@@ -294,10 +311,9 @@ public static class Node {
 //            System.out.println(tree.getNodes().get(4).getRight_brother().getStatus());
         }
         // System.out.println(tree.getNodes().get(9).getParent());
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         ArrayList<HashSet<Node>> sets = new ArrayList<>();
         while (true) {
-
             String input = scan.nextLine();
             if (input.equals("##"))
                 break;
@@ -312,23 +328,20 @@ public static class Node {
                 temp_set.add(node);
             }
             sets.add(temp_set);
-
-
         }
         scan.nextLine();
+
 //        HashSet<Node> a = sets.get(0);
 //        for (Node node : a) {
 //            System.out.println(node + " : " + tree.search(node));
 //        }
+        System.out.println(tree.getNodes().get(1).getLeft_child());
 
         for (HashSet<Node> final_set : sets) {
             if (check(tree, final_set))
                 System.out.println("Valid");
             else
                 System.out.println(("Invalid"));
-
         }
-
-
     }
 }
