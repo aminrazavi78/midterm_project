@@ -2,10 +2,7 @@
 package com.company;
 
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * @author Amin Razavi
@@ -267,19 +264,14 @@ class Main {
 
         Scanner scan = new Scanner(System.in);
 
-        while (true) {
+        List<String> result = new LinkedList<>();
+        String str = scan.nextLine();
+        while (!str.equals("###")) {
             Node fake_father = new Node();
             fake_father.setInfo("Fake");
             Tree tree = new Tree(fake_father);
             boolean check_point = true;
-            while (true) {
-                String str = scan.nextLine();
-
-                if (str.equals("#"))
-                    break;
-
-                if (str.equals("###"))
-                    return;
+            while (!str.equals("#")) {
                 if (str.contains("=") && !str.contains("+") && !str.contains("^") && !str.contains("|")) {
                     Node node = new Node();
                     Node parent = new Node();
@@ -366,18 +358,14 @@ class Main {
                     }
                 }
                 check_point = false;
-
+                str = scan.nextLine();
             }
             // System.out.println(tree.getNodes().get(9).getParent());
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             ArrayList<HashSet<Node>> sets = new ArrayList<>();
+            String input = scan.nextLine();
 
-            while (true) {
-                String input = scan.nextLine();
-
-
-                if (input.equals("##"))
-                    break;
+            while (!input.equals("##")) {
 
                 input = input.replaceAll("\\{", "");
                 input = input.replaceAll("\\}", "");
@@ -390,17 +378,22 @@ class Main {
                     temp_set.add(node);
                 }
                 sets.add(temp_set);
+                input = scan.nextLine();
             }
-
 
             for (HashSet<Node> final_set : sets) {
                 if (check(tree, final_set))
-                    System.out.println("Valid");
+                    result.add("Valid");
                 else
-                    System.out.println(("Invalid"));
+                    result.add("Invalid");
             }
-            System.out.println("+++");
+            result.add("+++");
 
+            str = scan.nextLine();
+        }
+
+        for (String s : result) {
+            System.out.println(s);
         }
     }
 }
