@@ -265,7 +265,7 @@ class Main {
         Scanner scan = new Scanner(System.in);
 
         List<String> result = new LinkedList<>();
-        String str = scan.nextLine();
+        String str = scan.nextLine().replace(" ", "");
         while (!str.equals("###")) {
             Node fake_father = new Node();
             fake_father.setInfo("Fake");
@@ -360,12 +360,12 @@ class Main {
                     }
                 }
                 check_point = false;
-                str = scan.nextLine();
+                str = scan.nextLine().replace(" ", "");
             }
             // System.out.println(tree.getNodes().get(9).getParent());
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             ArrayList<HashSet<Node>> sets = new ArrayList<>();
-            String input = scan.nextLine();
+            String input = scan.nextLine().replace(" ", "");
 
             while (!input.equals("##")) {
 
@@ -380,7 +380,7 @@ class Main {
                     temp_set.add(node);
                 }
                 sets.add(temp_set);
-                input = scan.nextLine();
+                input = scan.nextLine().replace(" ", "");
             }
 
             for (HashSet<Node> final_set : sets) {
@@ -391,7 +391,7 @@ class Main {
             }
             result.add("+++");
 
-            str = scan.nextLine();
+            str = scan.nextLine().replace(" ", "");
         }
 
         for (String s : result) {
