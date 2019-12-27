@@ -277,7 +277,9 @@ class Main {
                     Node parent = new Node();
                     String[] temp_line = str.split("[=]");
                     parent.setInfo(temp_line[0].trim());
-                    node.setInfo(temp_line[1].trim());
+                    if (str.contains("?"))
+                        node.setStatus("Optional");
+                    node.setInfo(temp_line[1].replace("?", "").trim());
                     tree.add_node(tree.getRoot(), parent);
                     tree.add_node(parent, node);
                 }
