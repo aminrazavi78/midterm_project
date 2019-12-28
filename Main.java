@@ -2,10 +2,7 @@
 package com.company;
 
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * @author Amin Razavi
@@ -267,25 +264,22 @@ class Main {
 
         Scanner scan = new Scanner(System.in);
 
-        while (true) {
+        List<String> result = new LinkedList<>();
+        String str = scan.nextLine().replace(" ", "");
+        while (!str.equals("###")) {
             Node fake_father = new Node();
             fake_father.setInfo("Fake");
             Tree tree = new Tree(fake_father);
             boolean check_point = true;
-            while (true) {
-                String str = scan.nextLine();
-
-                if (str.equals("#"))
-                    break;
-
-                if (str.equals("###"))
-                    return;
+            while (!str.equals("#")) {
                 if (str.contains("=") && !str.contains("+") && !str.contains("^") && !str.contains("|")) {
                     Node node = new Node();
                     Node parent = new Node();
                     String[] temp_line = str.split("[=]");
                     parent.setInfo(temp_line[0].trim());
-                    node.setInfo(temp_line[1].trim());
+                    if (str.contains("?"))
+                        node.setStatus("Optional");
+                    node.setInfo(temp_line[1].replace("?", "").trim());
                     tree.add_node(tree.getRoot(), parent);
                     tree.add_node(parent, node);
                 }
@@ -366,18 +360,14 @@ class Main {
                     }
                 }
                 check_point = false;
-
+                str = scan.nextLine().replace(" ", "");
             }
             // System.out.println(tree.getNodes().get(9).getParent());
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             ArrayList<HashSet<Node>> sets = new ArrayList<>();
+            String input = scan.nextLine().replace(" ", "");
 
-            while (true) {
-                String input = scan.nextLine();
-
-
-                if (input.equals("##"))
-                    break;
+            while (!input.equals("##")) {
 
                 input = input.replaceAll("\\{", "");
                 input = input.replaceAll("\\}", "");
@@ -390,17 +380,22 @@ class Main {
                     temp_set.add(node);
                 }
                 sets.add(temp_set);
+                input = scan.nextLine().replace(" ", "");
             }
-
 
             for (HashSet<Node> final_set : sets) {
                 if (check(tree, final_set))
-                    System.out.println("Valid");
+                    result.add("Valid");
                 else
-                    System.out.println(("Invalid"));
+                    result.add("Invalid");
             }
-            System.out.println("+++");
+            result.add("+++");
 
+            str = scan.nextLine().replace(" ", "");
+        }
+
+        for (String s : result) {
+            System.out.println(s);
         }
     }
 }
