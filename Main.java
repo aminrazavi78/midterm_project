@@ -1,11 +1,9 @@
 package com.company;
-
 import java.util.*;
-
 /**
  * @author Amin Razavi
  */
-class Main {
+public class Main {
     ///////////////////////////node////////////////////////////
     public static class Node {
         private String info;
@@ -34,7 +32,6 @@ class Main {
             return Right_brother;
         }
 
-        //new
         Node() {
             this.info = "";
             this.status = "";
@@ -58,11 +55,9 @@ class Main {
         void setLeft_child(Node left_child) {
             this.Left_child = left_child;
         }
-
         void setRight_brother(Node right_brother) {
             this.Right_brother = right_brother;
         }
-
         @Override
         public boolean equals(Object o) {
             Node node = (Node) o;
@@ -70,12 +65,10 @@ class Main {
                 return true;
             return false;
         }
-
         @Override
         public int hashCode() {
             return Objects.hash(info);
         }
-
         @Override
         public String toString() {
             return "Node{" +
@@ -83,26 +76,16 @@ class Main {
                     '}';
         }
     }
-
-
     ///////////////////////node//////////////////////////////////
-//////////////////////tree///////////////////////////////////
+
+    //////////////////////tree///////////////////////////////////
     static class Tree {
         private Node root;
         private ArrayList<Node> nodes = new ArrayList<>();
-        private ArrayList<Node> mandatory_nodes = new ArrayList<>();
 
         Tree(Node root) {
             this.root = root;
             nodes.add(root);
-        }
-
-        void setRoot(Node root) {
-            this.root = root;
-        }
-
-        void setNodes(ArrayList<Node> nodes) {
-            this.nodes = nodes;
         }
 
         Node getRoot() {
@@ -111,9 +94,6 @@ class Main {
 
 
         void add_node(Node temp_node) {
-//            System.out.println(temp_node.getInfo().trim());
-            if (temp_node.getStatus().equals("Mandatory"))
-                mandatory_nodes.add(temp_node);
 
             if (!nodes.contains(temp_node)) {
                 nodes.add(temp_node);
@@ -121,14 +101,8 @@ class Main {
         }
 
         void add_node(Node parent, Node temp_node) {
-//            System.out.println(parent.getInfo().trim() + " " + temp_node.getInfo().trim());
-            if(search_parent(temp_node.getInfo().trim()) != null)
+            if (search_parent(temp_node.getInfo().trim()) != null)
                 temp_node = search_parent(temp_node.getInfo().trim());
-
-            if (temp_node.getStatus().equals("Mandatory"))
-                mandatory_nodes.add(temp_node);
-
-
             temp_node.setParent(parent);
             if (parent.getLeft_child() == null) {
                 parent.setLeft_child(temp_node);
@@ -137,17 +111,16 @@ class Main {
                 Node node = parent.getLeft_child();
                 if (node.getInfo().trim().equals(temp_node.getInfo().trim()))
                     check_add_right_brother = false;
-                if (parent.getInfo().trim().equals("m") && temp_node.getInfo().trim().equals("n"))
-                    while (node.getRight_brother() != null) {
-                        node = node.getRight_brother();
-                        if (node.getInfo().trim().equals(temp_node.getInfo().trim()))
-                            check_add_right_brother = false;
-                    }
+                while (node.getRight_brother() != null) {
+                    node = node.getRight_brother();
+                    if (node.getInfo().trim().equals(temp_node.getInfo().trim()))
+                        check_add_right_brother = false;
+                }
                 if (check_add_right_brother)
                     node.setRight_brother(temp_node);
             }
             if (!nodes.contains(temp_node))
-                  nodes.add(temp_node);
+                nodes.add(temp_node);
         }
 
         boolean search(Node node) {
@@ -180,32 +153,26 @@ class Main {
                 if (node.getParent() == null) {
                     for (Node temp_parent : nodes) {
                         if (temp_parent.getLeft_child() != null)
-                            if (temp_parent.getLeft_child().getInfo().trim().equals(node.getInfo().trim())) {
+                            if (temp_parent.getLeft_child().getInfo().trim().equals(node.getInfo().trim()))
                                 node.setParent(temp_parent);
-                            }
                         if (temp_parent.getRight_brother() != null)
-                            if (temp_parent.getRight_brother().getInfo().trim().equals(node.getInfo().trim())) {
+                            if (temp_parent.getRight_brother().getInfo().trim().equals(node.getInfo().trim()))
                                 node.setParent(temp_parent.getParent());
-                            }
                     }
                 }
             }
         }
-
         public void delete_extra() {
             ArrayList<Node> deleting = new ArrayList<>();
             for (Node node : nodes) {
                 if (node.getParent() != null)
                     if (node.getInfo().trim().equals(node.getParent().getInfo().trim()))
                         deleting.add(node);
-
             }
             for (Node node : deleting) {
                 nodes.remove(node);
-
             }
         }
-
         @Override
         public String toString() {
             String str = " ";
@@ -214,15 +181,14 @@ class Main {
             }
             return str;
         }
-
     }
-
     ///////////////////////////tree////////////////////////////////
     private static boolean check(Tree tree, HashSet<Node> set) {
         for (Node node : set) {
             if (node.getStatus().equals("Mandatory"))
-                if (!node.equals(tree.search2(node)))
+                if (!node.equals(tree.search2(node))) {
                     return false;
+                }
         }
         for (Node node : set) {
             if (!tree.search(node)) {
@@ -233,8 +199,9 @@ class Main {
             Node n = tree.search2(node);
             Node q = new Node();
             q.setInfo(n.getParent().getInfo().trim());
-            if (!set.contains(q) && !q.getInfo().equals("Fake"))
+            if (!set.contains(q) && !q.getInfo().equals("Fake")) {
                 return false;
+            }
         }
         for (Node n1 : set) {
             Node node = tree.search2(n1);
@@ -247,8 +214,9 @@ class Main {
                     if (set.contains(child))
                         counter++;
                     if (child.getStatus().equals("Mandatory")) {
-                        if (!set.contains(child))
+                        if (!set.contains(child)) {
                             return false;
+                        }
                         mcounter++;
                     }
                     child = child.getRight_brother();
@@ -267,7 +235,6 @@ class Main {
         }
         return true;
     }
-
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
         List<String> result = new LinkedList<>();
@@ -281,43 +248,41 @@ class Main {
             while (!str.equals("#")) {
                 if (str.contains("=") && !str.contains("+") && !str.contains("^") && !str.contains("|")) {
                     Node node = new Node();
-
                     String[] temp_line = str.split("[=]");
-                    if(tree.search_parent(temp_line[1].trim()) != null)
-                        node= tree.search_parent(temp_line[1].trim());
+                    if (tree.search_parent(temp_line[1].trim()) != null)
+                        node = tree.search_parent(temp_line[1].trim());
                     Node parent = tree.search_parent(temp_line[0].trim());
                     if (str.contains("?")) {
                         node.setInfo(temp_line[1].replace("?", "").trim());
                         node.setStatus("Optional");
-                    } else {
+                    }
+                    else {
                         node.setStatus("Mandatory");
                         node.setInfo(temp_line[1].trim());
                     }
-                    if (parent == null && check_point == false) {
+                    if (parent == null && !check_point) {
                         parent = new Node();
                         parent.setInfo(temp_line[0].trim());
                         node.setInfo(temp_line[1].trim());
                         if (str.contains("?")) {
                             node.setInfo(temp_line[1].replace("?", "").trim());
                             node.setStatus("Optional");
-                        } else
+                        }
+                        else
                             node.setStatus("Mandatory");
                         parent.setLeft_child(node);
                         tree.add_node(parent);
                         tree.add_node(parent, node);
 
-                    } else if (check_point == true) {
+                    } else if (check_point) {
                         parent = new Node();
                         parent.setStatus("Mandatory");
                         parent.setInfo(temp_line[0].trim());
                         tree.add_node(tree.getRoot(), parent);
-                        //parent.setInfo(temp_line[0].trim());
                         tree.add_node(parent, node);
                     } else {
-//                        tree.add_node(parent);
                         tree.add_node(parent, node);
                     }
-
 
                 }
                 if (!str.contains("=")) {
@@ -326,54 +291,15 @@ class Main {
 
                     tree.add_node(tree.getRoot(), node);
                 }
-
                 if (str.contains("+")) {
                     String[] temp_line = str.split("[=,+]");
                     Node parent = tree.search_parent(temp_line[0].trim());
-                    if (parent == null && check_point == false) {
-
+                    if (parent == null && !check_point) {
                         parent = new Node();
                         parent.setInfo(temp_line[0].trim());
                         tree.add_node(parent);
                     }
-
-                    if (check_point == true) {
-                        parent = new Node();
-                        parent.setStatus("Mandatory");
-                        parent.setInfo(temp_line[0].trim());
-
-                        tree.add_node(tree.getRoot(), parent);
-                    }
-                    for (int i = 1; i < temp_line.length; i++) {
-                        Node node = new Node(); // new nabayad beshe lozoman
-                        if(tree.search_parent(temp_line[i].trim()) != null)
-                            node= tree.search_parent(temp_line[i].trim());
-                        node.setInfo(temp_line[i].trim());
-                        if (!temp_line[i].contains("?"))
-                            node.setStatus("Mandatory");
-                        else {
-
-                            node.setStatus("Optional");
-                            node.setInfo(node.getInfo().replace("?", "").trim());
-                        }
-                        //if (!tree.getNodes().contains(node))
-
-                        tree.add_node(parent, node);
-                        // if(tree.getNodes().contains(node) && tree.search2(node).getParent()== null)
-                        // tree.search2(node).setParent(parent);
-
-                    }
-
-                }
-                if (str.contains("|")) {
-                    String[] temp_line = str.split("[=,|]");
-                    Node parent = tree.search_parent(temp_line[0].trim());
-                    if (parent == null && check_point == false) {
-                        parent = new Node();
-                        parent.setInfo(temp_line[0].trim());
-                        tree.add_node(parent);
-                    }
-                    if (check_point == true) {
+                    if (check_point) {
                         parent = new Node();
                         parent.setStatus("Mandatory");
                         parent.setInfo(temp_line[0].trim());
@@ -381,24 +307,50 @@ class Main {
                     }
                     for (int i = 1; i < temp_line.length; i++) {
                         Node node = new Node();
-                        if(tree.search_parent(temp_line[i].trim()) != null)
-                            node= tree.search_parent(temp_line[i].trim());
+                        if (tree.search_parent(temp_line[i].trim()) != null)
+                            node = tree.search_parent(temp_line[i].trim());
+                        node.setInfo(temp_line[i].trim());
+                        if (!temp_line[i].contains("?"))
+                            node.setStatus("Mandatory");
+                        else {
+                            node.setStatus("Optional");
+                            node.setInfo(node.getInfo().replace("?", "").trim());
+                        }
+                        tree.add_node(parent, node);
+                    }
+                }
+                if (str.contains("|")) {
+                    String[] temp_line = str.split("[=,|]");
+                    Node parent = tree.search_parent(temp_line[0].trim());
+                    if (parent == null && !check_point) {
+                        parent = new Node();
+                        parent.setInfo(temp_line[0].trim());
+                        tree.add_node(parent);
+                    }
+                    if (check_point) {
+                        parent = new Node();
+                        parent.setStatus("Mandatory");
+                        parent.setInfo(temp_line[0].trim());
+                        tree.add_node(tree.getRoot(), parent);
+                    }
+                    for (int i = 1; i < temp_line.length; i++) {
+                        Node node = new Node();
+                        if (tree.search_parent(temp_line[i].trim()) != null)
+                            node = tree.search_parent(temp_line[i].trim());
                         node.setInfo(temp_line[i].trim());
                         node.setStatus("Or");
-
-
                         tree.add_node(parent, node);
                     }
                 }
                 if (str.contains("^")) {
                     String[] temp_line = str.split("[=,^]");
                     Node parent = tree.search_parent(temp_line[0].trim());
-                    if (parent == null && check_point == false) {
+                    if (parent == null && !check_point) {
                         parent = new Node();
                         parent.setInfo(temp_line[0].trim());
                         tree.add_node(parent);
                     }
-                    if (check_point == true) {
+                    if (check_point) {
                         parent = new Node();
                         parent.setStatus("Mandatory");
                         parent.setInfo(temp_line[0].trim());
@@ -407,8 +359,8 @@ class Main {
                     }
                     for (int i = 1; i < temp_line.length; i++) {
                         Node node = new Node();
-                        if(tree.search_parent(temp_line[i].trim()) != null)
-                            node= tree.search_parent(temp_line[i].trim());
+                        if (tree.search_parent(temp_line[i].trim()) != null)
+                            node = tree.search_parent(temp_line[i].trim());
                         node.setInfo(temp_line[i].trim());
                         node.setStatus("Alternative");
                         tree.add_node(parent, node);
@@ -419,8 +371,7 @@ class Main {
             }
             tree.find_father();
             tree.delete_extra();
-//            System.out.println(tree);
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            ///////////////////////////////////////////////////////////////////////////////////////////////
             ArrayList<HashSet<Node>> sets = new ArrayList<>();
             String input = scan.nextLine().replace(" ", "");
             while (!input.equals("##")) {
@@ -435,14 +386,12 @@ class Main {
                 }
                 sets.add(temp_set);
                 input = scan.nextLine().replace(" ", "");
-
             }
             for (HashSet<Node> final_set : sets) {
                 if (check(tree, final_set))
                     result.add("Valid");
                 else
                     result.add("Invalid");
-
             }
             result.add("+++");
             str = scan.nextLine().replace(" ", "");
